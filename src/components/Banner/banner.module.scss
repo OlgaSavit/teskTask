@@ -1,0 +1,52 @@
+@import "../../../style/variebles";
+.wrapperBlock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 650px;
+  background: $yellow;
+  padding: 50px 0;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  @media (max-width: 768px) {
+    min-height: 500px;
+    padding: 69px 0;
+  }
+  @media (max-width: 576px) {
+    padding: 20px 16px;
+  }
+  .contentCenter {
+    margin: auto;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .btnWrapper{
+      margin-top: 30px;
+    }
+  }
+  .text {
+    font-size: 18px;
+    line-height: 33px;
+    text-align: center;
+    color: $white;
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .wrapperBlock .text {
+    margin-top: 8px;
+    font-size: 16px;
+    line-height: 25px;
+  }
+
+  .wrapperBlock {
+    background-size: cover;
+
+    .contentCenter {
+      margin-top: 20px;
+    }
+  }
+}

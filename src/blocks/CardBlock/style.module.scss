@@ -1,0 +1,24 @@
+.wrapper-row{
+  margin-top:50px;
+}
+.cardSection{
+  margin: 140px 0;
+  .column{
+
+    @media (max-width: 767px) {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  .wrapperBtn{
+    display: flex;
+    justify-content: center;
+    margin-top: 21px;
+    @media (max-width: 768px) {
+      margin-top: 34px;
+    }
+    @media (max-width: 576px) {
+      margin-top:30px ;
+    }
+  }
+}

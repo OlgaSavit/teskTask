@@ -1,0 +1,35 @@
+.container{
+  margin: auto;
+  padding: 0 16px;
+  @media (min-width: 576px) {
+    max-width: 540px;
+  }
+  @media (min-width: 768px) {
+    max-width: 704px;
+    padding: 0;
+  }
+  @media (min-width: 1024px) {
+    max-width: 904px;
+    padding: 0;
+  }
+  @media (min-width: 1200px) {
+    max-width: 1170px;
+    padding: 0;
+  }
+  &.light{
+    //@media (min-width: 576px) {
+    //  max-width: 540px;
+    //}
+    //@media (min-width: 768px) {
+    //  max-width: 704px;
+    //}
+    @media (min-width: 0px) {
+      max-width: 100%;
+      padding: 0;
+    }
+    @media (min-width: 1200px) {
+      max-width: 1170px;
+      padding: 0;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.authSection{
+  .form{
+    display: flex;
+    flex-direction: column;
+    max-width: 380px;
+    margin: 0 auto;
+    .wrapperInput{
+      margin-top: 48px;
+      width: 100%;
+      &:first-child{
+        margin-top: 41px;
+      }
+    }
+    .radioWrapper{
+      margin-top: 23px;
+    }
+    .wrapperBtn{
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+    }
+  }
+  .errorText{
+    color: #d32f2f;
+    font-size: 12px;
+    font-family: Nunito;
+    margin-top: 20px;
+    text-align: center;
+  }
+  .fileWrapper{
+    margin-top: 40px;
+  }
+}
