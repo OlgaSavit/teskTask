@@ -2,9 +2,9 @@ import styles from "./style.module.scss";
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import Text from "../Text";
-import { useEffect, useState } from "react";
+import {forwardRef, useEffect, useState} from "react";
 const cx = classNames.bind(styles);
-const InputUploadComponent = ({
+const InputUploadComponent =forwardRef( ({
   required,
   id,
   name,
@@ -12,10 +12,9 @@ const InputUploadComponent = ({
   defaultValue,
   errorMessage,
   onChange,
-
   errors,
   ...field
-}) => {
+},ref) => {
   const [file, setFile] = useState({});
   return (
     <div>
@@ -23,6 +22,7 @@ const InputUploadComponent = ({
         <div className={cx("btn")}>
           <Text type={"p1"}>Upload</Text>
           <input
+           ref={ref}
             name={name}
             type="file"
             accept="image/jpeg,image/jpg"
@@ -47,5 +47,5 @@ const InputUploadComponent = ({
       {errors && <p className={cx("errorText")}>{errors.message}</p>}
     </div>
   );
-};
+});
 export default InputUploadComponent;

@@ -9,4 +9,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
+  @media (max-width: 1024px) {
+    width: 180px;
+  }
 }

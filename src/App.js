@@ -6,9 +6,10 @@ import "./img/banner.png";
 import AuthBlock from "./blocks/Auth/index";
 import { useState } from "react";
 import SuccessRegistration from "./blocks/SuccessRegistration";
-import { Container } from "@mui/material";
+import Button from "./components/Button";
+import { Link } from "react-scroll";
 function App() {
-  const [successAddUser, setSuccessUser] = useState(false);
+  const [successAddUser, setSuccessUser] = useState(undefined);
   return (
     <div>
       <Header />
@@ -26,7 +27,7 @@ function App() {
         {!successAddUser ? (
           <AuthBlock setSuccessUser={setSuccessUser} />
         ) : (
-          <SuccessRegistration />
+          <SuccessRegistration textMessage={successAddUser} />
         )}
       </ContainerComponent>
     </div>

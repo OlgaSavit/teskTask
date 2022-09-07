@@ -10,6 +10,8 @@ import { addUser, getToken } from "../../api/users";
 import InputText from "../../components/InputText";
 import { validationRulesError } from "../../utils/validationRules";
 import Spinner from "../../components/Spinner";
+import NotificationContainer from "react-notifications/lib/NotificationContainer";
+import { notify } from "../../utils/notify";
 const cx = classNames.bind(styles);
 const AuthBlock = ({ setSuccessUser }) => {
   const [data, setData] = useState({
@@ -93,7 +95,11 @@ const AuthBlock = ({ setSuccessUser }) => {
           })
           .catch((err) => {
             if (err.response.status === 409) {
-              setErrors({ other: err.response.data.message });
+              notify({
+                type: "error",
+                message: err.response.data.message,
+                timeOut: 3000,
+              });
             } else {
               setErrors(err.response.data.fails);
             }
@@ -166,7 +172,6 @@ const AuthBlock = ({ setSuccessUser }) => {
             errorMessages={errors?.photo}
           />
         </div>
-        {errors.other && <p className={cx("errorText")}>{errors.other}</p>}
         <div className={cx("wrapperBtn")}>
           {loader ? (
             <Spinner color={"#00BDD3"} />
@@ -183,6 +188,7 @@ const AuthBlock = ({ setSuccessUser }) => {
           )}
         </div>
       </form>
+      <NotificationContainer />
     </section>
   );
 };

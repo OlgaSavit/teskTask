@@ -1,10 +1,7 @@
 import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
-import styles from "./style.module.scss";
-import classNames from "classnames/bind";
-import { useController } from "react-hook-form";
-const cx = classNames.bind(styles);
+import { forwardRef } from 'react'
 const theme = createTheme({
   components: {
     MuiOutlinedInput: {
@@ -14,7 +11,6 @@ const theme = createTheme({
           fontSize: "16px",
           color: "black",
           borderColor: "#D0CFCF",
-          // backgroundColor: "red",
         },
       },
     },
@@ -44,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const InputTextNew = (props) => {
+const InputTextNew =forwardRef((props,ref) => {
   const classes = useStyles();
   return (
     <ThemeProvider theme={theme}>
@@ -54,8 +50,9 @@ const InputTextNew = (props) => {
         error={props.errors}
         helperText={props.errors ? props.errors?.message : props.helperText}
         className={props.errors ? classes.customStyles : ""}
+        ref={ref}
       />
     </ThemeProvider>
   );
-};
+});
 export default InputTextNew;

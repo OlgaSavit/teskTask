@@ -48,7 +48,7 @@ const CardBlock = ({ successAddUser }) => {
       });
   };
   return (
-    <section className={cx("cardSection")}>
+    <section id={"UsersBlock"} className={cx("cardSection")}>
       <Heading level={1} position={"center"}>
         Working with GET request
       </Heading>

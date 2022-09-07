@@ -3,6 +3,7 @@ import Logo from "../../img/Logo.svg";
 import styles from "./style.module.scss";
 import classNames from "classnames/bind";
 import ContainerComponent from "../Container";
+import { Link } from "react-scroll";
 const cx = classNames.bind(styles);
 const Header = () => {
   return (
@@ -13,8 +14,12 @@ const Header = () => {
             <img src={Logo} />
           </div>
           <div>
-            <Button style={{ marginRight: "10px" }}>Users</Button>
-            <Button>Sign Up</Button>
+            <Link activeClass="active" to={"UsersBlock"} duration={100}>
+              <Button style={{ marginRight: "10px" }}>Users</Button>
+            </Link>
+            <Link activeClass="active" to={"SignUpBlock"} duration={100}>
+              <Button>Sign up</Button>
+            </Link>
           </div>
         </div>
       </ContainerComponent>

@@ -1,7 +1,7 @@
 import Heading from "../../components/Heading";
 import styles from "./style.module.scss";
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../../components/Button";
 import RadioComponent from "../../components/RadioComponent";
 import { getPositionsList } from "../../api/positions";
@@ -11,13 +11,16 @@ import Spinner from "../../components/Spinner";
 import { useForm, Controller } from "react-hook-form";
 import InputTextNew from "../../components/InputTextNew";
 import InputUploadComponent from "../../components/InputUploadNewComponent";
+import { notify } from "../../utils/notify";
+import NotificationContainer from "react-notifications/lib/NotificationContainer";
 const cx = classNames.bind(styles);
 const AuthBlock = ({ setSuccessUser }) => {
+  let ref = useRef();
+  let refRadio = useRef();
+  let patternPhone = /^[\+]{0,1}380([0-9]{9})$/;
   const [positionsList, setPositionsList] = useState([]);
-  const [photoError, setPhotoError] = useState(false);
-  const [file, setFile] = useState(null);
   const [loader, setLoader] = useState(false);
-
+  const [disabled, setDisabled] = useState(true);
   const fetchPositionsList = () => {
     getPositionsList().then((res) => {
       if (res.status === 200) {
@@ -28,34 +31,31 @@ const AuthBlock = ({ setSuccessUser }) => {
   useEffect(() => {
     fetchPositionsList();
   }, []);
-  const setDefaultValues = () => {
-    return {
-      name: undefined,
-      email: undefined,
-      phone: undefined,
-      position: "1",
-      photo: null,
-    };
-  };
+
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isDirty, dirtyFields },
     setError,
-    getValues,
     setValue,
+    getValues,
   } = useForm({
     reValidateMode: "onChange",
-    defaultValues: setDefaultValues(),
+    defaultValues: {
+      name: undefined,
+      email: undefined,
+      phone: undefined,
+      position: 1,
+      photo: null,
+    },
   });
   const handleChange = (event) => {
     setValue("position", event.target.value);
   };
   const uploadPhoto = (file) => {
-    setFile(file);
     setValue("photo", file);
   };
-  let patternPhone = /^[\+]{0,1}380([0-9]{9})$/;
+
   const onSubmit = (data) => {
     const formData = new FormData();
     formData.append("photo", data.photo[0]);
@@ -71,28 +71,39 @@ const AuthBlock = ({ setSuccessUser }) => {
         addUser(formData)
           .then((res) => {
             if (res.status === 201) {
-              setSuccessUser(true);
+              setSuccessUser(res.data.message);
             }
           })
           .catch((err) => {
+            if (err.response.status === 401) {
+              notify({
+                type: "error",
+                message: err.response.data.message,
+                timeOut: 3000,
+              });
+            }
             if (err.response.status === 409) {
-              setError({ other: err.response.data.message });
+              notify({
+                type: "error",
+                message: err.response.data.message,
+                timeOut: 3000,
+              });
             } else {
               let key = Object.keys(err.response.data.fails)[0];
               let val = Object.values(err.response.data.fails);
-              console.log("val", key);
               setError(key, { message: val.join() });
             }
           })
           .finally(() => {
             setLoader(false);
+            localStorage.removeItem("token");
           });
       }
     });
   };
 
   return (
-    <section className={cx("authSection")}>
+    <section id={"SignUpBlock"} className={cx("authSection")}>
       <Heading level={1} position={"center"}>
         Working with POST request
       </Heading>
@@ -109,13 +120,15 @@ const AuthBlock = ({ setSuccessUser }) => {
                   "User name, should be 2-60 characters",
               },
             }}
-            render={({ field }) => (
+            render={({ field, inputRef }) => (
               <InputTextNew
+                ref={ref}
                 fullWidth
                 label={"Name"}
                 name={"name"}
                 errors={errors.name}
                 {...field}
+                {...inputRef}
               />
             )}
           />
@@ -177,6 +190,7 @@ const AuthBlock = ({ setSuccessUser }) => {
                 list={positionsList}
                 handleChange={handleChange}
                 nameRadio={"position"}
+                ref={refRadio}
                 {...field}
               />
             )}
@@ -200,11 +214,15 @@ const AuthBlock = ({ setSuccessUser }) => {
             )}
           />
         </div>
-        {/*{errors.other && <p className={cx("errorText")}>{errors.other}</p>}*/}
         <div className={cx("wrapperBtn")}>
-          {loader ? <Spinner color={"#00BDD3"} /> : <Button>Sign up</Button>}
+          {loader ? (
+            <Spinner color={"#00BDD3"} />
+          ) : (
+            <Button disabled={!isDirty}>Sign up</Button>
+          )}
         </div>
       </form>
+      <NotificationContainer />
     </section>
   );
 };
