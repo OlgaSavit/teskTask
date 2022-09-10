@@ -1,10 +1,9 @@
 import Heading from "../../components/Heading";
 import styles from "./style.module.scss";
 import classNames from "classnames/bind";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import Button from "../../components/Button";
 import RadioComponent from "../../components/RadioComponent";
-import { getPositionsList } from "../../api/positions";
 import Spinner from "../../components/Spinner";
 import { useForm, Controller } from "react-hook-form";
 import InputTextNew from "../../components/InputTextNew";
