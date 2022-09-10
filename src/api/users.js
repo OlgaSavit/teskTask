@@ -9,8 +9,11 @@ export const getToken = () => {
   return axios.get(`${baseURL}token`);
 };
 
-export const addUser = (data) => {
-  return axios.post(`${baseURL}users`, data);
+export const addUser = (data, token) => {
+  const config = {
+    headers: { Token: `${token}` },
+  };
+  return axios.post(`${baseURL}users`, data, config);
 };
 export const getInfoUser = (id) => {
   return axios.get(`${baseURL}users/${id}`);

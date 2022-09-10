@@ -20,6 +20,7 @@ const AuthBlock = ({ setSuccessUser, setUser }) => {
   let refRadio = useRef();
   const [positionsList, setPositionsList] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [token, setToken] = useState(null);
   const fetchPositionsList = () => {
     getPositionsList().then((res) => {
       if (res.status === 200) {
@@ -31,6 +32,7 @@ const AuthBlock = ({ setSuccessUser, setUser }) => {
     getToken().then((res) => {
       if (res.status === 200) {
         localStorage.setItem("token", res.data.token);
+        setToken(res.data.token);
       }
     });
   };
@@ -74,7 +76,7 @@ const AuthBlock = ({ setSuccessUser, setUser }) => {
     formData.append("phone", data.phone);
     formData.append("position_id", data.position);
     setLoader(true);
-    addUser(formData)
+    addUser(formData, token)
       .then((res) => {
         if (res.status === 201) {
           let { user_id, message } = res.data;
