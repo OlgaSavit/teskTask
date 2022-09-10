@@ -11,7 +11,7 @@ export const getToken = () => {
 
 export const addUser = (data, token) => {
   const config = {
-    headers: { Token: `${token}` },
+    headers: { Token: `${token}`},
   };
   return axios.post(`${baseURL}users`, data, config);
 };
