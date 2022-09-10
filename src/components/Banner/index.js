@@ -5,7 +5,7 @@ import Container from "../Container";
 import Text from "../Text";
 import Button from "../Button";
 import { Link } from "react-scroll";
-const Banner = ({ bgImg, title, text }) => {
+const Banner = ({ bgImg, title, text, user }) => {
   return (
     <div
       style={{
@@ -23,11 +23,13 @@ const Banner = ({ bgImg, title, text }) => {
         >
           {text}
         </Text>
-        <div className={styles.btnWrapper}>
-          <Link activeClass="active" to={"SignUpBlock"} duration={100}>
-            <Button>Sign up</Button>
-          </Link>
-        </div>
+        {!user && (
+          <div className={styles.btnWrapper}>
+            <Link activeClass="active" to={"SignUpBlock"} duration={100}>
+              <Button>Sign up</Button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

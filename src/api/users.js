@@ -12,3 +12,6 @@ export const getToken = () => {
 export const addUser = (data) => {
   return axios.post(`${baseURL}users`, data);
 };
+export const getInfoUser = (id) => {
+  return axios.get(`${baseURL}users/${id}`);
+};

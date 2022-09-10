@@ -1,6 +1,5 @@
 import styles from "./style.module.scss";
 import classNames from "classnames/bind";
-import PropTypes from "prop-types";
 const cx = classNames.bind(styles);
 const HeadingComponent = ({ children, level, position, style }) => {
   const renderTag = (level) => {
@@ -43,7 +42,3 @@ const HeadingComponent = ({ children, level, position, style }) => {
   return renderTag(level);
 };
 export default HeadingComponent;
-HeadingComponent.propTypes = {
-  level: PropTypes.number,
-  position: PropTypes.string,
-};

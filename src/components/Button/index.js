@@ -1,6 +1,5 @@
 import styles from "./style.module.scss";
 import classNames from "classnames/bind";
-import PropTypes from "prop-types";
 const cx = classNames.bind(styles);
 const Button = ({
   children,
@@ -21,9 +20,3 @@ const Button = ({
   );
 };
 export default Button;
-Button.prototype = {
-  children: PropTypes.element,
-  type: PropTypes.string,
-  disabled: PropTypes.bool,
-  style: PropTypes.any,
-};

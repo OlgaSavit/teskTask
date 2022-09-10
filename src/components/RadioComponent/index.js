@@ -5,7 +5,6 @@ import {
   RadioGroup,
 } from "@mui/material";
 import Text from "../Text";
-import { useController } from "react-hook-form";
 import { forwardRef } from "react";
 
 const RadioComponent = forwardRef(

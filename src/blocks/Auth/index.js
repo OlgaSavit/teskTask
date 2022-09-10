@@ -6,21 +6,20 @@ import Button from "../../components/Button";
 import RadioComponent from "../../components/RadioComponent";
 import { getPositionsList } from "../../api/positions";
 
-import { addUser, getToken } from "../../api/users";
+import { addUser, getInfoUser, getToken } from "../../api/users";
 import Spinner from "../../components/Spinner";
 import { useForm, Controller } from "react-hook-form";
 import InputTextNew from "../../components/InputTextNew";
 import InputUploadComponent from "../../components/InputUploadNewComponent";
 import { notify } from "../../utils/notify";
 import NotificationContainer from "react-notifications/lib/NotificationContainer";
+import { patternEmail, patternPhone } from "../../utils/patterns";
 const cx = classNames.bind(styles);
-const AuthBlock = ({ setSuccessUser }) => {
+const AuthBlock = ({ setSuccessUser, setUser }) => {
   let ref = useRef();
   let refRadio = useRef();
-  let patternPhone = /^[\+]{0,1}380([0-9]{9})$/;
   const [positionsList, setPositionsList] = useState([]);
   const [loader, setLoader] = useState(false);
-  const [disabled, setDisabled] = useState(true);
   const fetchPositionsList = () => {
     getPositionsList().then((res) => {
       if (res.status === 200) {
@@ -28,23 +27,34 @@ const AuthBlock = ({ setSuccessUser }) => {
       }
     });
   };
+  const fetchToken = () => {
+    getToken().then((res) => {
+      if (res.status === 200) {
+        localStorage.setItem("token", res.data.token);
+      }
+    });
+  };
   useEffect(() => {
     fetchPositionsList();
+    fetchToken();
+    return () => {
+      localStorage.removeItem("token");
+    };
   }, []);
 
   const {
     handleSubmit,
     control,
-    formState: { errors, isDirty, dirtyFields },
+    formState: { errors, isDirty },
     setError,
     setValue,
     getValues,
   } = useForm({
     reValidateMode: "onChange",
     defaultValues: {
-      name: undefined,
-      email: undefined,
-      phone: undefined,
+      name: "",
+      email: "",
+      phone: "",
       position: 1,
       photo: null,
     },
@@ -63,45 +73,49 @@ const AuthBlock = ({ setSuccessUser }) => {
     formData.append("email", data.email);
     formData.append("phone", data.phone);
     formData.append("position_id", data.position);
-
-    getToken().then((res) => {
-      if (res.status === 200) {
-        setLoader(true);
-        localStorage.setItem("token", res.data.token);
-        addUser(formData)
-          .then((res) => {
-            if (res.status === 201) {
-              setSuccessUser(res.data.message);
-            }
-          })
-          .catch((err) => {
-            if (err.response.status === 401) {
-              notify({
-                type: "error",
-                message: err.response.data.message,
-                timeOut: 3000,
-              });
-            }
-            if (err.response.status === 409) {
-              notify({
-                type: "error",
-                message: err.response.data.message,
-                timeOut: 3000,
-              });
-            } else {
-              let key = Object.keys(err.response.data.fails)[0];
-              let val = Object.values(err.response.data.fails);
-              setError(key, { message: val.join() });
-            }
-          })
-          .finally(() => {
-            setLoader(false);
-            localStorage.removeItem("token");
+    setLoader(true);
+    addUser(formData)
+      .then((res) => {
+        if (res.status === 201) {
+          let { user_id, message } = res.data;
+          setSuccessUser(message);
+          getInfoUser(user_id)
+            .then((res) => {
+              if (res.status === 200) {
+                let { user } = res.data;
+                setUser(user);
+              }
+            })
+            .catch((err) => {
+              console.error(err.response.message);
+            });
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          notify({
+            type: "error",
+            message: err.response.data.message,
+            timeOut: 3000,
           });
-      }
-    });
+        } else if (err.response.status === 409) {
+          notify({
+            type: "error",
+            message: err.response.data.message,
+            timeOut: 3000,
+          });
+        } else if (err.response.status === 422) {
+          let { fails } = err.response.data;
+          let keys = Object.keys(err.response.data.fails);
+          keys.map((item) => {
+            setError(item, { message: fails[item].join() });
+          });
+        }
+      })
+      .finally(() => {
+        setLoader(false);
+      });
   };
-
   return (
     <section id={"SignUpBlock"} className={cx("authSection")}>
       <Heading level={1} position={"center"}>
@@ -141,7 +155,7 @@ const AuthBlock = ({ setSuccessUser }) => {
               required: "Field is required",
               validate: {
                 correctEmail: (value) =>
-                  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ||
+                  patternEmail.test(value) ||
                   "User email, must be a valid email according to RFC2822",
               },
             }}
