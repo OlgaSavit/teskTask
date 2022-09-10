@@ -1,10 +1,12 @@
+import defaultProfile from "../../img/defaultprovile.svg";
 import styles from "./style.module.scss";
 import classNames from "classnames/bind";
+
 const cx = classNames.bind(styles);
-const ImageComponent = ({ photo }) => {
+const ImageComponent = ({ photo = defaultProfile, altText = "image" }) => {
   return (
     <div className={cx("wrapperImg")}>
-      <img src={photo} />
+      <img alt={altText} src={photo} />
     </div>
   );
 };

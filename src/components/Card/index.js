@@ -7,7 +7,7 @@ const cx = classNames.bind(styles);
 const Card = ({ item }) => {
   return (
     <div className={cx("mainWrapper")}>
-      <ImageComponent photo={item.photo} />
+      <ImageComponent altText={item.name} photo={item.photo} />
       <TooltipComponent title={item.name}>
         <div className={cx("shortText", "name")}>
           <Text shortText={true} type={"p1"}>

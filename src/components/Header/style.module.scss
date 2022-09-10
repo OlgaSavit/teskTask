@@ -16,3 +16,12 @@
     height: 100%;
   }
 }
+.flexBlock{
+  display: flex;
+  align-items: center;
+}
+.welcomeText{
+  @media (max-width: 576px) {
+    display: none;
+  }
+}
