@@ -18,9 +18,7 @@ const CustomTooltip = styled(({ className, ...props }) => (
 export default function TooltipComponent({ children, title }) {
   return (
     <div>
-      <CustomTooltip title={title}>
-        <>{children}</>
-      </CustomTooltip>
+      <CustomTooltip title={title}>{children}</CustomTooltip>
     </div>
   );
 }
